@@ -3,7 +3,6 @@ import routes from './routes';
 import cors from 'cors';
 import fs from 'fs';
 import dotenv from 'dotenv';
-import path from 'path';
 
 const morgan = require("morgan");
 
@@ -31,10 +30,6 @@ export default class App {
         this.express.use(cors());
         this.express.use(express.json());
         this.express.use(morgan("dev"));
-        this.express.use(
-            "/files",
-            express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
-          );
     }
 
     private routes(): void {
