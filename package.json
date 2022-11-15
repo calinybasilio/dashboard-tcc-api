@@ -4,7 +4,7 @@
   "description": "Api do Nosso Cafofo para suprir a Aplicação Web e Aplicativos Mobile.",
   "main": "server.js",
   "scripts": {
-    "build": "tsc && npm run start",
+    "build": "tsc",
     "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
     "knex:migrate:rollback": "knex --knexfile knexfile.ts migrate:rollback",
     "start": "node dist/src/server.js",
