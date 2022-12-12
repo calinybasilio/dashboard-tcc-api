@@ -1,5 +1,5 @@
 {
-  "name": "nosso-cafofo-api",
+  "name": "dashboard-tcc-api",
   "version": "2.0.0",
   "description": "Api do Nosso Cafofo para suprir a Aplicação Web e Aplicativos Mobile.",
   "main": "server.js",
@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VJEFERSON/nosso-cafofo-api.git"
+    "url": "git+https://github.com/VJEFERSON/dashboard-tcc-api.git"
   },
   "keywords": [],
   "author": "Valdeci Jeferson Pereira Rocha",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/VJEFERSON/nosso-cafofo-api/issues"
+    "url": "https://github.com/VJEFERSON/dashboard-tcc-api/issues"
   },
-  "homepage": "https://github.com/VJEFERSON/nosso-cafofo-api#readme",
+  "homepage": "https://github.com/VJEFERSON/dashboard-tcc-api#readme",
   "dependencies": {
     "@sendgrid/mail": "^7.6.2",
     "@types/pdfmake": "^0.1.21",
