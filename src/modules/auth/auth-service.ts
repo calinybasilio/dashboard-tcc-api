@@ -18,6 +18,9 @@ export default class AuthService {
                 name: 'Caliny Basilio'
             };
 
+            console.log('process.env.EMAIL->', process.env.EMAIL);
+            console.log('process.env.PASSWORD_ENCRYPTED->', process.env.PASSWORD_ENCRYPTED);
+
             if (filters.email !== process.env.EMAIL
                 || filters.password !== process.env.PASSWORD_ENCRYPTED) {
                 throw new Error('Credenciais inválidas!');
