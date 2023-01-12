@@ -15,7 +15,7 @@ export default class AuthService {
         try {
             let user: IAuthenticatedUser = {
                 id: 1,
-                name: 'Caliny Basilio'
+                name: 'Caliny Basílio'
             };
 
             if (filters.email !== process.env.EMAIL
