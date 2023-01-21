@@ -14,7 +14,7 @@ routes.post('/authenticate', authController.authenticate);
 
 // routes.get('/usuario', authMiddleware, usuarioController.find);
 // routes.get('/usuario/:id', authMiddleware, usuarioController.findOne);
-// routes.post('/usuario', authMiddleware, authAdministradoresMiddleware, usuarioController.create);
+// routes.post('/usuario', usuarioController.create);
 // routes.put('/usuario/:id', authMiddleware, usuarioController.upsert);
 // routes.put('/usuario/ativar/:id', authMiddleware, usuarioController.ativacaoOuDesativacao);
 // routes.put('/usuario/desativar/:id', authMiddleware, usuarioController.ativacaoOuDesativacao);

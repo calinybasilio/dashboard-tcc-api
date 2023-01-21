@@ -1,10 +1,16 @@
+import moment from 'moment';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import moment from 'moment';
+import database from '../../database/connection';
 
 import { IAuthenticateBody } from '../../interfaces/authenticate-body-interface';
-import { IAuthenticatedUser } from '../../interfaces/authenticated-user.interface';
 import { ILoginResult } from '../../interfaces/login-result';
+import { IUser } from '../../interfaces/user-interface';
+
+import CriptPasswordSerive from '../../utils/cript-password-service';
+import ValidadoresSerive from '../../utils/validadores-service';
+
+import { User } from '../usuario/user-model';
 
 dotenv.config();
 
@@ -13,23 +19,38 @@ export default class AuthService {
 
     async authenticate(filters: IAuthenticateBody): Promise<ILoginResult> {
         try {
-            let user: IAuthenticatedUser = {
-                id: 1,
-                name: 'Caliny Basílio'
-            };
+            ValidadoresSerive.validEmail((filters as IAuthenticateBody).email);
+            ValidadoresSerive.validPassword((filters as IAuthenticateBody).password);
+            const user: User[] = await database('user')
+                .select('user.*')
+                .where('user.email', (filters as IAuthenticateBody).email)
+                .limit(1)
+                .offset(0);
 
-            if (filters.email !== process.env.EMAIL
-                || filters.password !== process.env.PASSWORD_ENCRYPTED) {
-                throw new Error('Credenciais inválidas!');
+            if (Array.isArray(user) && user.length > 0) {
+                if (!user[0].active) {
+                    throw new Error('Usuário foi desativado!');
+                }
+                
+                let isUserValid: boolean = CriptPasswordSerive.decrypt((filters as IAuthenticateBody).password, (user[0] as IUser).password as string);
+
+                if (isUserValid) {
+                    const { token, decoded } = this.signToken({ id: user[0].id });
+
+                    return {
+                        token,
+                        expiresIn: moment.unix(decoded.exp).toDate(),
+                        user: {
+                            id: user[0].id,
+                            name: user[0].name,
+                        }
+                    } as ILoginResult;
+                } else {
+                    throw new Error('Credenciais inválidas!');
+                }
+            } else {
+                throw new Error('Não existe um usuário para o Email informado!');
             }
-
-            const { token, decoded } = this.signToken({ id: user.id });
-
-            return {
-                token,
-                expiresIn: moment.unix(decoded.exp).toDate(),
-                user
-            } as ILoginResult;
         } catch (error) {
             throw error;
         }
