@@ -15,6 +15,7 @@ export default async function authMiddleware(request: Request, response: Respons
         const { authorization } = request.headers;
         if (!authorization) {
             response.sendStatus(401);
+            return;
         }
 
         token = authorization?.replace('Bearer', '').trim();
