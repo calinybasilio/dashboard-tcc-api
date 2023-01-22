@@ -1,7 +1,7 @@
-import { EventIntegration } from "aws-sdk/clients/appintegrations";
+import { EIteractionType, ELocalities } from "../utils/enums";
 
-export interface IIncidenceOfWordsPerJournalists {
+export interface IFilterIncidenceOfWordsPerJournalists {
   journalistId: number;
-  iteractionType: EventIntegration;
-  localityId: number;
+  iteractionType: EIteractionType;
+  localityId: ELocalities;
 }

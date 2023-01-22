@@ -1,35 +1,56 @@
 import { Request, Response } from "express";
 
-import { IIncidenceOfWordsPerJournalists } from "../../interfaces/filter-incidence-of-words-per-journalists.interface";
+import { IFilterIncidenceOfWordsPerJournalists } from "../../interfaces/filter-incidence-of-words-per-journalists.interface";
 import { IGeneralStatistics } from "../../interfaces/general-statistics.interface";
+
 import { IncidenceOfWords } from "../incidence-of-words/incidence-of-words-model";
+
+import { mappingIteractionTypeToFolderName } from "../../utils/consts";
 
 export default class DashboardController {
   async incidenceOfWordsPerJournalists(request: Request, response: Response) {
     try {
-      const filters: IIncidenceOfWordsPerJournalists = request.query as any;
+      const filters: IFilterIncidenceOfWordsPerJournalists =
+        request.body as any;
 
       const statistic: IGeneralStatistics = {
         labels: [],
         datasets: [
           {
-            label: "Incidência",
-            data: [],
-          },
-        ],
+            label: `Incidência (${
+              mappingIteractionTypeToFolderName[filters.iteractionType]
+            })`,
+            data: []
+          }
+        ]
       };
 
       const query = IncidenceOfWords.query().alias("i");
 
-      if (!isNaN(+filters.journalistId)) {
+      if (
+        !isNaN(+filters.journalistId) &&
+        filters.journalistId !== null &&
+        filters.journalistId !== undefined &&
+        (filters.journalistId as any) !== ""
+      ) {
         query.where("i.journalistId", +filters.journalistId);
       }
 
-      if (!isNaN(+filters.iteractionType)) {
+      if (
+        !isNaN(+filters.iteractionType) &&
+        filters.iteractionType !== null &&
+        filters.iteractionType !== undefined &&
+        (filters.iteractionType as any) !== ""
+      ) {
         query.where("i.iteractionType", +filters.iteractionType);
       }
 
-      if (!isNaN(+filters.localityId)) {
+      if (
+        !isNaN(+filters.localityId) &&
+        filters.localityId !== null &&
+        filters.localityId !== undefined &&
+        (filters.localityId as any) !== ""
+      ) {
         query.where("j.localityId", +filters.localityId);
       }
 

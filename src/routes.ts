@@ -34,7 +34,7 @@ routes.post(
   incidenceOfWordsController.import
 );
 
-routes.get(
+routes.post(
   "/dashboard/incidence-of-words-per-journalists",
   authMiddleware,
   dashboardController.incidenceOfWordsPerJournalists
