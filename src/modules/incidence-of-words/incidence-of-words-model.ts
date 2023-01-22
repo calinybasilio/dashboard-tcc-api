@@ -3,12 +3,14 @@ import { IIncidenceOfWords } from '../../interfaces/incidence-of-words-interface
 
 import { Word } from '../word/word-model';
 import { Journalist } from '../journalist/journalist-model';
+import { EIteractionType } from '../../utils/enums';
 
 export class IncidenceOfWords extends Model implements IIncidenceOfWords {
     id?: number;
     count: number;
     wordId: number;
     journalistId: number;   
+    iteractionType: EIteractionType;
 
     static get tableName() {
         return 'incidence_of_words';
@@ -23,6 +25,7 @@ export class IncidenceOfWords extends Model implements IIncidenceOfWords {
             count: { type: 'integer' },
             wordId: { type: 'integer' },
             journalistId: { type: 'integer' },
+            iteractionType: { type: 'integer' }
         }
     }
 
