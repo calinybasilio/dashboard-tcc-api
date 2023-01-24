@@ -2,12 +2,41 @@ import { Request, Response } from "express";
 
 import { IFilterIncidenceOfWordsPerJournalists } from "../../interfaces/filter-incidence-of-words-per-journalists.interface";
 import { IGeneralStatistics } from "../../interfaces/general-statistics.interface";
+import { ITweetsStatistics } from "../../interfaces/tweets-statistics-result.interface";
 
 import { IncidenceOfWords } from "../incidence-of-words/incidence-of-words-model";
 
 import { mappingIteractionTypeToFolderName } from "../../utils/consts";
+import { Tweet } from "../tweets/tweet-model";
 
 export default class DashboardController {
+  async tweetStatistics(request: Request, response: Response) {
+    try {
+      const query = Tweet.query().alias("t");
+
+      const result = await query
+        .select("j.localityId")
+        .joinRelated("journalist", { alias: "j" })
+        .count("*")
+        .groupBy("j.localityId")
+        .limit(20)
+        .orderBy("j.localityId", "ASC");
+
+      const totalBhTweets = result?.length ? +(result[0] as any).count : 0;
+      const totalMvTweets = result?.length ? +(result[1] as any).count : 0;
+      return response.status(200).send({
+        totalTweets: totalBhTweets + totalMvTweets,
+        totalBhTweets,
+        totalMvTweets,
+      } as ITweetsStatistics);
+    } catch (error: any) {
+      return response.status(400).json({
+        error: "Erro ao buscar estatísticas",
+        message: error.message,
+      });
+    }
+  }
+
   async incidenceOfWordsPerJournalists(request: Request, response: Response) {
     try {
       const filters: IFilterIncidenceOfWordsPerJournalists =
@@ -20,9 +49,9 @@ export default class DashboardController {
             label: `Incidência (${
               mappingIteractionTypeToFolderName[filters.iteractionType]
             })`,
-            data: []
-          }
-        ]
+            data: [],
+          },
+        ],
       };
 
       const query = IncidenceOfWords.query().alias("i");

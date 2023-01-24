@@ -30,11 +30,7 @@ routes.post("/authenticate", authController.authenticate);
 routes.post("/journalist/import", authMiddleware, journalistController.import);
 routes.get("/journalist", authMiddleware, journalistController.find);
 
-routes.post(
-  "/tweet/import",
-  authMiddleware,
-  tweetController.import
-);
+routes.post("/tweet/import", authMiddleware, tweetController.import);
 
 routes.post(
   "/incidence-of-words/import",
@@ -46,6 +42,12 @@ routes.post(
   "/dashboard/incidence-of-words-per-journalists",
   authMiddleware,
   dashboardController.incidenceOfWordsPerJournalists
+);
+
+routes.get(
+  "/dashboard/tweet-statistics",
+  authMiddleware,
+  dashboardController.tweetStatistics
 );
 
 export default routes;
