@@ -8,6 +8,7 @@ import AuthController from "./modules/auth/auth-controller";
 import JournalistController from "./modules/journalist/journalist-controller";
 import IncidenceOfWordsController from "./modules/incidence-of-words/incidence-of-words-controller";
 import DashboardController from "./modules/dashboard/dashboard-controller";
+import TweetController from "./modules/tweets/tweet-controller";
 
 const routes = express.Router();
 const pingController = new PingController();
@@ -16,6 +17,7 @@ const authController = new AuthController();
 const journalistController = new JournalistController();
 const incidenceOfWordsController = new IncidenceOfWordsController();
 const dashboardController = new DashboardController();
+const tweetController = new TweetController();
 
 routes.get("/", pingController.ping);
 routes.post("/authenticate", authController.authenticate);
@@ -27,6 +29,12 @@ routes.post("/authenticate", authController.authenticate);
 
 routes.post("/journalist/import", authMiddleware, journalistController.import);
 routes.get("/journalist", authMiddleware, journalistController.find);
+
+routes.post(
+  "/tweet/import",
+  authMiddleware,
+  tweetController.import
+);
 
 routes.post(
   "/incidence-of-words/import",
