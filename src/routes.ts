@@ -50,4 +50,10 @@ routes.get(
   dashboardController.tweetStatistics
 );
 
+routes.get(
+  "/dashboard/tweet-per-month",
+  authMiddleware,
+  dashboardController.tweetPerMonth
+);
+
 export default routes;

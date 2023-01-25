@@ -6,8 +6,10 @@ import { ITweetsStatistics } from "../../interfaces/tweets-statistics-result.int
 
 import { IncidenceOfWords } from "../incidence-of-words/incidence-of-words-model";
 
-import { mappingIteractionTypeToFolderName } from "../../utils/consts";
+import { mappingIteractionTypeToFolderName, mappingLabelsMonths } from "../../utils/consts";
 import { Tweet } from "../tweets/tweet-model";
+import knex from "knex";
+import { raw } from "objection";
 
 export default class DashboardController {
   async tweetStatistics(request: Request, response: Response) {
@@ -19,7 +21,6 @@ export default class DashboardController {
         .joinRelated("journalist", { alias: "j" })
         .count("*")
         .groupBy("j.localityId")
-        .limit(20)
         .orderBy("j.localityId", "ASC");
 
       const totalBhTweets = result?.length ? +(result[0] as any).count : 0;
@@ -95,6 +96,40 @@ export default class DashboardController {
       (incidences || []).forEach((item) => {
         statistic.labels.push((item as any).word);
         statistic.datasets[0].data.push((item as any).sum);
+      });
+
+      return response.status(200).send(statistic);
+    } catch (error: any) {
+      return response.status(400).json({
+        error: "Erro ao buscar estatísticas",
+        message: error.message,
+      });
+    }
+  }
+
+  async tweetPerMonth(request: Request, response: Response) {
+    try {
+      const query = Tweet.query().alias("t");
+
+      const result = await query
+        .select(raw("to_char(t.date_tweet, 'MM') as month"))
+        .count("*")
+        .groupBy(raw("to_char(t.date_tweet, 'MM')"))
+        .orderBy(raw("to_char(t.date_tweet, 'MM')"), "ASC");
+
+      const statistic: IGeneralStatistics = {
+        labels: [],
+        datasets: [
+          {
+            label: `Tweets`,
+            data: [],
+          },
+        ],
+      };
+
+      (result || []).forEach((item) => {
+        statistic.labels.push(mappingLabelsMonths[(item as any).month]);
+        statistic.datasets[0].data.push((item as any).count);
       });
 
       return response.status(200).send(statistic);
