@@ -6,10 +6,14 @@ import { ITweetsStatistics } from "../../interfaces/tweets-statistics-result.int
 
 import { IncidenceOfWords } from "../incidence-of-words/incidence-of-words-model";
 
-import { mappingIteractionTypeToFolderName, mappingLabelsMonths } from "../../utils/consts";
+import {
+  mappingIteractionTypeToFolderName,
+  mappingLabelsMonths,
+} from "../../utils/consts";
 import { Tweet } from "../tweets/tweet-model";
-import knex from "knex";
 import { raw } from "objection";
+import { IFilterTweetsPerMonth } from "../../interfaces/filter-tweets-per-month.interface";
+import ValidadoresSerive from "../../utils/validadores-service";
 
 export default class DashboardController {
   async tweetStatistics(request: Request, response: Response) {
@@ -109,11 +113,22 @@ export default class DashboardController {
 
   async tweetPerMonth(request: Request, response: Response) {
     try {
+      const filters: IFilterTweetsPerMonth = request.query as any;
+
       const query = Tweet.query().alias("t");
+
+      if (ValidadoresSerive.validNumberQueryParam(filters.journalistId)) {
+        query.where("t.journalistId", +filters.journalistId);
+      }
+
+      if (ValidadoresSerive.validNumberQueryParam(filters.localityId)) {
+        query.where("j.localityId", filters.localityId);
+      }
 
       const result = await query
         .select(raw("to_char(t.date_tweet, 'MM') as month"))
         .count("*")
+        .joinRelated("journalist", { alias: "j" })
         .groupBy(raw("to_char(t.date_tweet, 'MM')"))
         .orderBy(raw("to_char(t.date_tweet, 'MM')"), "ASC");
 
