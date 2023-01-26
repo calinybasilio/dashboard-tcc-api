@@ -10,6 +10,7 @@ import IncidenceOfWordsController from "./modules/incidence-of-words/incidence-o
 import DashboardController from "./modules/dashboard/dashboard-controller";
 import TweetController from "./modules/tweets/tweet-controller";
 import WordController from "./modules/word/word-controller";
+import IncidenceController from "./modules/incidence/incidence-controller";
 
 const routes = express.Router();
 const pingController = new PingController();
@@ -17,6 +18,7 @@ const authController = new AuthController();
 // const usuarioController = new UserController();
 const journalistController = new JournalistController();
 const incidenceOfWordsController = new IncidenceOfWordsController();
+const incidenceController = new IncidenceController();
 const dashboardController = new DashboardController();
 const tweetController = new TweetController();
 const wordController  = new WordController();
@@ -38,6 +40,12 @@ routes.post(
   "/incidence-of-words/import",
   authMiddleware,
   incidenceOfWordsController.import
+);
+
+routes.post(
+  "/incidence/import",
+  authMiddleware,
+  incidenceController.import
 );
 
 routes.post(

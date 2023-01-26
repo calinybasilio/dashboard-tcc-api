@@ -16,20 +16,31 @@ export const mappingLocalityToFolderName: {
   [locality: number]: string;
 } = {
   [ELocalities.BELO_HORIZONTE]: "dados_bh_data",
-  [ELocalities.MONTEVIDEO]: "dados_mv_data"
+  [ELocalities.MONTEVIDEO]: "dados_mv_data",
 };
 
-export const mappingLabelsMonths: {[month: string]: string} = {
-  ['01']: 'Janeiro',
-  ['02']: 'Fevereiro',
-  ['03']: 'Março',
-  ['04']: 'Abril',
-  ['05']: 'Maio',
-  ['06']: 'Junho',
-  ['07']: 'Julho',
-  ['08']: 'Agosto',
-  ['09']: 'Setembro',
-  ['10']: 'Outubro',
-  ['11']: 'Novembro',
-  ['12']: 'Dezembro'
-}
+export const mappingLabelsMonths: { [month: string]: string } = {
+  ["01"]: "Janeiro",
+  ["02"]: "Fevereiro",
+  ["03"]: "Março",
+  ["04"]: "Abril",
+  ["05"]: "Maio",
+  ["06"]: "Junho",
+  ["07"]: "Julho",
+  ["08"]: "Agosto",
+  ["09"]: "Setembro",
+  ["10"]: "Outubro",
+  ["11"]: "Novembro",
+  ["12"]: "Dezembro",
+};
+
+export const monthsImportations = [
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+];
