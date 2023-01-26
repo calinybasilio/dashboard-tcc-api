@@ -1,5 +1,5 @@
 export interface IFindWord {
-    word: string | null;
+    localityId: number;
     limit: number;
     offset: number;
 }

@@ -95,7 +95,8 @@ export default class DashboardController {
         .sum("i.count")
         .groupBy("w.word")
         .limit(20)
-        .orderBy("sum", "DESC");
+        .orderBy("sum", "DESC")
+        .orderBy("w.word", "ASC");
 
       (incidences || []).forEach((item) => {
         statistic.labels.push((item as any).word);

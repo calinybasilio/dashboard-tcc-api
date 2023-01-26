@@ -9,6 +9,7 @@ import JournalistController from "./modules/journalist/journalist-controller";
 import IncidenceOfWordsController from "./modules/incidence-of-words/incidence-of-words-controller";
 import DashboardController from "./modules/dashboard/dashboard-controller";
 import TweetController from "./modules/tweets/tweet-controller";
+import WordController from "./modules/word/word-controller";
 
 const routes = express.Router();
 const pingController = new PingController();
@@ -18,6 +19,7 @@ const journalistController = new JournalistController();
 const incidenceOfWordsController = new IncidenceOfWordsController();
 const dashboardController = new DashboardController();
 const tweetController = new TweetController();
+const wordController  = new WordController();
 
 routes.get("/", pingController.ping);
 routes.post("/authenticate", authController.authenticate);
@@ -54,6 +56,12 @@ routes.get(
   "/dashboard/tweet-per-month",
   authMiddleware,
   dashboardController.tweetPerMonth
+);
+
+routes.get(
+  "/word",
+  authMiddleware,
+  wordController.find
 );
 
 export default routes;
