@@ -3,17 +3,16 @@ import { Request, Response } from "express";
 import { IFilterIncidenceOfWordsPerJournalists } from "../../interfaces/filter-incidence-of-words-per-journalists.interface";
 import { IGeneralStatistics } from "../../interfaces/general-statistics.interface";
 import { ITweetsStatistics } from "../../interfaces/tweets-statistics-result.interface";
-
-import { IncidenceOfWords } from "../incidence-of-words/incidence-of-words-model";
-
 import {
   mappingIteractionTypeToFolderName,
   mappingLabelsMonths,
+  monthsImportations,
 } from "../../utils/consts";
 import { Tweet } from "../tweets/tweet-model";
 import { raw } from "objection";
 import { IFilterTweetsPerMonth } from "../../interfaces/filter-tweets-per-month.interface";
 import ValidadoresSerive from "../../utils/validadores-service";
+import { Incidence } from "../incidence/incidence-model";
 
 export default class DashboardController {
   async tweetStatistics(request: Request, response: Response) {
@@ -59,33 +58,22 @@ export default class DashboardController {
         ],
       };
 
-      const query = IncidenceOfWords.query().alias("i");
+      const query = Incidence.query().alias("i");
 
-      if (
-        !isNaN(+filters.journalistId) &&
-        filters.journalistId !== null &&
-        filters.journalistId !== undefined &&
-        (filters.journalistId as any) !== ""
-      ) {
+      if (ValidadoresSerive.validNumberQueryParam(filters.journalistId)) {
         query.where("i.journalistId", +filters.journalistId);
       }
 
-      if (
-        !isNaN(+filters.iteractionType) &&
-        filters.iteractionType !== null &&
-        filters.iteractionType !== undefined &&
-        (filters.iteractionType as any) !== ""
-      ) {
+      if (ValidadoresSerive.validNumberQueryParam(filters.iteractionType)) {
         query.where("i.iteractionType", +filters.iteractionType);
       }
 
-      if (
-        !isNaN(+filters.localityId) &&
-        filters.localityId !== null &&
-        filters.localityId !== undefined &&
-        (filters.localityId as any) !== ""
-      ) {
+      if (ValidadoresSerive.validNumberQueryParam(filters.localityId)) {
         query.where("j.localityId", +filters.localityId);
+      }
+
+      if (monthsImportations.indexOf(filters.month) > -1) {
+        query.where("i.month", filters.month);
       }
 
       const incidences = await query

@@ -3,7 +3,7 @@ import { raw } from "objection";
 import { IFindWord } from "../../interfaces/find-word-interface";
 import { LIMIT_DEFAULT, LIMIT_MAXIMO } from "../../utils/consts";
 import ValidadoresSerive from "../../utils/validadores-service";
-import { IncidenceOfWords } from "../incidence-of-words/incidence-of-words-model";
+import { Incidence } from "../incidence/incidence-model";
 
 export default class WordController {
   async find(request: Request, response: Response) {
@@ -14,8 +14,8 @@ export default class WordController {
           ? +filters.limit
           : LIMIT_DEFAULT;
       const offset: number = filters.offset || 0;
-      const query = IncidenceOfWords.query().alias("i");
-      const queryCount = IncidenceOfWords.query().alias("i");
+      const query = Incidence.query().alias("i");
+      const queryCount = Incidence.query().alias("i");
 
       if (ValidadoresSerive.validNumberQueryParam(filters.localityId)) {
         query.where("j.localityId", +filters.localityId);
